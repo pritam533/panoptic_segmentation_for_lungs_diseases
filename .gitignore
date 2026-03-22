@@ -1,0 +1,6 @@
+dataset/
+*.png
+*.jpg
+*.pdf
+app/static/output_images/
+app/static/uploaded_images/
