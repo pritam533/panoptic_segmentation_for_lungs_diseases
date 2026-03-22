@@ -7,11 +7,20 @@ class PDFReport(FPDF):
         self.cell(0, 10, 'Lung Disease Detection Report', ln=True, align='C')
         self.ln(10)
 
+    # def add_patient_info(self, name, age, gender):
+    #     self.set_font('Arial', '', 12)
+    #     self.cell(0, 10, f'Name: {name}    Age: {age}    Gender: {gender}', ln=True)
+    #     self.cell(0, 10, f'Date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', ln=True)
+    #     self.ln(5)
     def add_patient_info(self, name, age, gender):
-        self.set_font('Arial', '', 12)
-        self.cell(0, 10, f'Name: {name}    Age: {age}    Gender: {gender}', ln=True)
-        self.cell(0, 10, f'Date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', ln=True)
-        self.ln(5)
+         self.set_font('Arial', '', 12)
+    
+         self.cell(0, 10, f'Name: {name}', ln=True)
+         self.cell(0, 10, f'Age: {age}', ln=True)
+         self.cell(0, 10, f'Gender: {gender}', ln=True)
+    
+         self.cell(0, 10, f'Date: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}', ln=True)
+         self.ln(5)
 
     def add_images(self, xray_path, mask_path):
         self.cell(0, 10, 'X-ray Image:', ln=True)
@@ -32,7 +41,7 @@ class PDFReport(FPDF):
     def footer(self):
         self.set_y(-15)
         self.set_font('Arial', 'I', 10)
-        self.cell(0, 10, 'AI-generated report. Please consult a certified radiologist.', align='C')
+        self.cell(0, 10, 'NOTE: this is an AI-generated report. Please consult a certified radiologist. Thank you for using our service.', align='C')
 
 
 def get_disease_comment(disease, severity):

@@ -1,0 +1,179 @@
+
+/* Background with gradient */
+body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+}
+
+/* Glassmorphism container */
+.container {
+      max-width: 650px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      color: #fff;
+}
+
+/* Headings */
+h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 10px;
+}
+
+h2 {
+      text-align: center;
+      margin-top: 20px;
+}
+
+/* Labels */
+label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+}
+
+/* Inputs */
+input,
+select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      transition: 0.3s;
+}
+
+/* Input focus effect */
+input:focus,
+select:focus {
+      background: #ffffff;
+      box-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+}
+
+/* Button */
+button {
+      margin-top: 20px;
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 12px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+}
+
+/* Button hover animation */
+button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.5);
+}
+
+/* Error message */
+.error-message {
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(255, 0, 0, 0.2);
+      border-radius: 10px;
+      color: #fff;
+      text-align: center;
+}
+
+/* Results section */
+.results-container {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.2);
+}
+
+/* Result items */
+.result-item {
+      margin-top: 10px;
+      font-size: 15px;
+}
+
+/* Image styling */
+.result-image {
+      display: block;
+      margin-top: 15px;
+      max-width: 100%;
+      border-radius: 12px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Download button */
+.download-btn {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #43e97b, #38f9d7);
+      padding: 12px;
+      border-radius: 12px;
+      color: #000;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+}
+
+.download-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(56, 249, 215, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+      .container {
+            padding: 20px;
+      }
+}
+
+/* Loader spinner */
+.loader {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+}
+
+@keyframes spin {
+      100% {
+            transform: rotate(360deg);
+      }
+}
+
+/* Toast notification */
+.toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #111;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: 0.3s;
+      z-index: 999;
+}
+
+.toast.show {
+      opacity: 1;
+      transform: translateY(0);
+}
