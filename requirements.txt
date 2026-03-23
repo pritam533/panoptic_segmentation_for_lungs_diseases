@@ -1,6 +1,9 @@
+setuptools
+wheel
+gunicorn
 Flask==2.3.2
 Flask-Cors==3.0.10
-numpy==1.24.3
+numpy>=1.26.0
 opencv-python==4.7.0.72
 Pillow==9.5.0
 matplotlib==3.7.1
