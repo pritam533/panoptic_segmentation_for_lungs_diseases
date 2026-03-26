@@ -99,6 +99,7 @@ form.addEventListener("submit", async function (e) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
     }
+    
 });
 
 //  Toast Notification System (Modern UI)

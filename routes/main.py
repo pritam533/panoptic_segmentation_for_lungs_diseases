@@ -21,7 +21,7 @@ def analyze():
     try:
         file = request.files['xray']
         name = request.form['name']
-        age = request.form['age']
+        age = float(request.form['age'])
         gender = request.form['gender']
 
         # Create paths using os.path.join for cross-platform compatibility
@@ -33,6 +33,7 @@ def analyze():
         report_path = os.path.join(output_dir, f'report_{os.path.splitext(file.filename)[0]}.pdf')
 
         file.save(xray_path)
+        
 
         # Segment the lung
         mask = segment_lung(xray_path)

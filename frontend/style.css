@@ -1,146 +1,194 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-/* Background with gradient */
-body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
+* {
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      box-sizing: border-box;
+}
+
+body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
       min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 }
 
-/* Glassmorphism container */
+/* Glassmorphism Card */
 .container {
+      width: 100%;
       max-width: 650px;
-      margin: auto;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 30px;
-      border-radius: 20px;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      background: rgba(255, 255, 255, 0.18);
+      padding: 35px;
+      border-radius: 22px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
       color: #fff;
+      animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Headings */
+/* Heading */
 h1 {
       text-align: center;
-      font-size: 28px;
-      margin-bottom: 10px;
+      font-size: 30px;
+      font-weight: 600;
+      margin-bottom: 5px;
+}
+
+h1::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 3px;
+      margin: 8px auto;
+      background: #fff;
+      border-radius: 10px;
+      opacity: 0.7;
 }
 
 h2 {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 25px;
+      font-weight: 500;
 }
 
 /* Labels */
 label {
       display: block;
-      margin-top: 15px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
+      margin-top: 18px;
+      font-weight: 500;
+      font-size: 14px;
+      opacity: 0.9;
 }
 
 /* Inputs */
 input,
 select {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       margin-top: 6px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
       outline: none;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       font-size: 14px;
-      transition: 0.3s;
+      transition: all 0.3s ease;
 }
 
-/* Input focus effect */
+/* Focus Glow */
 input:focus,
 select:focus {
       background: #ffffff;
-      box-shadow: 0 0 8px rgba(0, 242, 254, 0.8);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.9);
+      transform: scale(1.02);
+}
+
+/* File input styling */
+input[type="file"] {
+      padding: 10px;
+      cursor: pointer;
 }
 
 /* Button */
 button {
-      margin-top: 20px;
+      margin-top: 25px;
+      width: 100%;
       background: linear-gradient(135deg, #ff7eb3, #ff758c);
       color: white;
       border: none;
       cursor: pointer;
       font-size: 16px;
-      font-weight: bold;
-      padding: 12px;
-      border-radius: 12px;
+      font-weight: 600;
+      padding: 14px;
+      border-radius: 14px;
       transition: all 0.3s ease;
+      letter-spacing: 0.5px;
 }
 
-/* Button hover animation */
+/* Button Hover */
 button:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 20px rgba(255, 117, 140, 0.5);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 25px rgba(255, 117, 140, 0.5);
 }
 
-/* Error message */
+/* Button Click */
+button:active {
+      transform: scale(0.97);
+}
+
+/* Error */
 .error-message {
       margin-top: 15px;
-      padding: 10px;
-      background: rgba(255, 0, 0, 0.2);
-      border-radius: 10px;
+      padding: 12px;
+      background: rgba(255, 0, 0, 0.25);
+      border-radius: 12px;
       color: #fff;
       text-align: center;
+      font-size: 14px;
 }
 
-/* Results section */
+/* Results Card */
 .results-container {
       margin-top: 25px;
-      padding: 20px;
-      border-radius: 15px;
-      background: rgba(255, 255, 255, 0.2);
+      padding: 22px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Result items */
+/* Result Items */
 .result-item {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
 }
 
-/* Image styling */
+/* Highlight values */
+.result-item span {
+      font-weight: 600;
+}
+
+/* Image */
 .result-image {
       display: block;
       margin-top: 15px;
       max-width: 100%;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 2px solid rgba(255, 255, 255, 0.5);
+      transition: 0.3s;
 }
 
-/* Download button */
+.result-image:hover {
+      transform: scale(1.03);
+}
+
+/* Download Button */
 .download-btn {
       display: block;
       margin-top: 20px;
       text-align: center;
       background: linear-gradient(135deg, #43e97b, #38f9d7);
-      padding: 12px;
-      border-radius: 12px;
+      padding: 14px;
+      border-radius: 14px;
       color: #000;
-      font-weight: bold;
+      font-weight: 600;
       text-decoration: none;
       transition: 0.3s;
 }
 
 .download-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(56, 249, 215, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(56, 249, 215, 0.6);
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-      .container {
-            padding: 20px;
-      }
-}
-
-/* Loader spinner */
+/* Loader */
 .loader {
       border: 3px solid rgba(255, 255, 255, 0.3);
       border-top: 3px solid white;
@@ -152,28 +200,93 @@ button:hover {
       margin-right: 8px;
 }
 
+/* Toast */
+.toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: 0.3s;
+      z-index: 999;
+      font-size: 14px;
+}
+
+.toast.show {
+      opacity: 1;
+      transform: translateY(0);
+}
+
+/* Animations */
 @keyframes spin {
       100% {
             transform: rotate(360deg);
       }
 }
 
-/* Toast notification */
-.toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #111;
-      color: #fff;
-      padding: 12px 18px;
-      border-radius: 10px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: 0.3s;
-      z-index: 999;
+@keyframes fadeIn {
+      from {
+            opacity: 0;
+            transform: translateY(20px);
+      }
+
+      to {
+            opacity: 1;
+            transform: translateY(0);
+      }
 }
 
-.toast.show {
-      opacity: 1;
-      transform: translateY(0);
+/* Responsive */
+@media (max-width: 600px) {
+      .container {
+            padding: 22px;
+      }
+
+      h1 {
+            font-size: 24px;
+      }
+}
+/* Severity Colors */
+.severity-low {
+      color: #2ecc71;
+      font-weight: 600;
+}
+
+.severity-medium {
+      color: #f1c40f;
+      font-weight: 600;
+}
+
+.severity-high {
+      color: #e74c3c;
+      font-weight: 600;
+}
+
+/* AI Comment Box */
+.ai-comment-box {
+      margin-top: 10px;
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.2);
+      font-size: 14px;
+      line-height: 1.6;
+      border-left: 5px solid #3498db;
+      transition: 0.3s;
+}
+
+/* Comment highlight styles */
+.comment-good {
+      border-left-color: #2ecc71;
+}
+
+.comment-warning {
+      border-left-color: #f1c40f;
+}
+
+.comment-danger {
+      border-left-color: #e74c3c;
 }
