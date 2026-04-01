@@ -1,27 +1,105 @@
-from flask import Blueprint, request, jsonify, render_template
-import sys
+# from flask import Blueprint, request, jsonify, render_template
+# import sys
+# import os
+# from tensorflow.keras.models import load_model
+# import cv2  # Added import
+# from utils.segmentation import segment_image
+# from utils.classification import classify_disease
+# from utils.report_generator import generate_report
+
+# unet_model = load_model("app/model/unet_fixed.h5")
+# classifier_model = load_model("app/model/classifier_model.h5")
+# # Ensure directories exist
+# os.makedirs('app/static/uploaded_images', exist_ok=True)
+# os.makedirs('app/static/output_images', exist_ok=True)
+
+# main = Blueprint('main', __name__)
+# #added a simple home route for testing
+# @main.route("/")
+# def home():
+#     return "Lung Detection API Running "
+
+# @main.route('/', methods=['GET'])
+# def index():
+#     return render_template('index.html')
+
+# @main.route('/analyze', methods=['POST'])
+# def analyze():
+#     try:
+#         file = request.files['xray']
+#         name = request.form['name']
+#         age = float(request.form['age'])
+#         gender = request.form['gender']
+    
+#         # Create paths using os.path.join for cross-platform compatibility
+#         upload_dir = 'app/static/uploaded_images'
+#         output_dir = 'app/static/output_images'
+        
+#         xray_path = os.path.join(upload_dir, file.filename)
+#         mask_path = os.path.join(output_dir, f'mask_{file.filename}')
+#         report_path = os.path.join(output_dir, f'report_{os.path.splitext(file.filename)[0]}.pdf')
+
+#         file.save(xray_path)
+        
+
+#         # Segment the lung
+#         mask = segment_image(xray_path)
+#         cv2.imwrite(mask_path, mask)
+
+#         # Classify disease
+#         disease, confidence, severity = classify_disease(xray_path)
+        
+#         # Generate report
+#         generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
+#         # Determine the comment based on severity
+#         if severity.lower() == "low":
+#           comment = "Mild condition detected. No immediate risk, but monitoring is advised."
+#         elif severity.lower() == "medium":
+#           comment = "Moderate infection detected. Please consult a doctor."
+#         else:
+#           comment = "Severe condition detected. Immediate medical attention required."
+
+# # Return the JSON response
+#         return jsonify({
+#             "success": True,
+#             "disease": disease,
+#             "severity": severity,
+#             "confidence": f"{confidence:.2f}",
+#            "comment": comment,  # Include the computed comment here
+#            "segmented_image": f"mask_{file.filename}",
+#           "pdf_report": f"report_{os.path.splitext(file.filename)[0]}.pdf"
+#     })
+       
+#     except Exception as e:
+#         return jsonify({
+#             "success": False,
+#             "error": str(e)
+#         }), 500
+
+
+
 import os
+from flask import Blueprint, request, jsonify, render_template
 from tensorflow.keras.models import load_model
-import cv2  # Added import
+import cv2
+
 from utils.segmentation import segment_image
 from utils.classification import classify_disease
 from utils.report_generator import generate_report
 
-unet_model = load_model("app/model/unet_fixed.h5")
-classifier_model = load_model("app/model/classifier_model.h5")
-# Ensure directories exist
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+unet_model = load_model(os.path.join(BASE_DIR, "..", "model", "unet_fixed.h5"), compile=False)
+classifier_model = load_model(os.path.join(BASE_DIR, "..", "model", "classifier_model.h5"), compile=False)
+
 os.makedirs('app/static/uploaded_images', exist_ok=True)
 os.makedirs('app/static/output_images', exist_ok=True)
 
 main = Blueprint('main', __name__)
-#added a simple home route for testing
+
 @main.route("/")
 def home():
-    return "Lung Detection API Running "
-
-@main.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
+    return "Lung Detection API Running"
 
 @main.route('/analyze', methods=['POST'])
 def analyze():
@@ -30,52 +108,45 @@ def analyze():
         name = request.form['name']
         age = float(request.form['age'])
         gender = request.form['gender']
-    
-        # Create paths using os.path.join for cross-platform compatibility
+
         upload_dir = 'app/static/uploaded_images'
         output_dir = 'app/static/output_images'
-        
+
         xray_path = os.path.join(upload_dir, file.filename)
         mask_path = os.path.join(output_dir, f'mask_{file.filename}')
         report_path = os.path.join(output_dir, f'report_{os.path.splitext(file.filename)[0]}.pdf')
 
         file.save(xray_path)
-        
 
-        # Segment the lung
-        mask = segment_image(xray_path)
+        mask = segment_image(xray_path, unet_model)
         cv2.imwrite(mask_path, mask)
 
-        # Classify disease
-        disease, confidence, severity = classify_disease(xray_path)
-        
-        # Generate report
-        generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
-        # Determine the comment based on severity
-        if severity.lower() == "low":
-          comment = "Mild condition detected. No immediate risk, but monitoring is advised."
-        elif severity.lower() == "medium":
-          comment = "Moderate infection detected. Please consult a doctor."
-        else:
-          comment = "Severe condition detected. Immediate medical attention required."
+        disease, confidence, severity = classify_disease(xray_path, classifier_model)
 
-# Return the JSON response
+        generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
+
+        if severity.lower() == "low":
+            comment = "Mild condition detected. No immediate risk, but monitoring is advised."
+        elif severity.lower() == "medium":
+            comment = "Moderate infection detected. Please consult a doctor."
+        else:
+            comment = "Severe condition detected. Immediate medical attention required."
+
         return jsonify({
             "success": True,
             "disease": disease,
             "severity": severity,
             "confidence": f"{confidence:.2f}",
-           "comment": comment,  # Include the computed comment here
-           "segmented_image": f"mask_{file.filename}",
-          "pdf_report": f"report_{os.path.splitext(file.filename)[0]}.pdf"
-    })
-       
+            "comment": comment,
+            "segmented_image": f"mask_{file.filename}",
+            "pdf_report": f"report_{os.path.splitext(file.filename)[0]}.pdf"
+        })
+
     except Exception as e:
         return jsonify({
             "success": False,
             "error": str(e)
         }), 500
-
 
 
 
