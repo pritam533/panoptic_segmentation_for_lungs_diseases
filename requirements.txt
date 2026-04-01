@@ -22,9 +22,17 @@
 
 
 
+# Flask==2.3.2
+# gunicorn==21.2.0
+# numpy==1.23.5
+# opencv-python-headless
+# tensorflow==2.16.1
+# scikit-learn
+
 Flask==2.3.2
 gunicorn==21.2.0
 numpy==1.23.5
-opencv-python-headless
-tensorflow==2.16.1
-scikit-learn
+tensorflow==2.13.0
+keras==2.13.1
+setuptools>=65.5.0
+wheel
