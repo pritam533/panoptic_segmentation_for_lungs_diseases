@@ -17,9 +17,9 @@ BASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'class
 try:
     classifier_model = load_model(MODEL_PATH, compile=False)
     labels = np.load(LABELS_PATH)
-    print("✅ Classifier model loaded successfully")
+    print(" Classifier model loaded successfully")
 except Exception as e:
-    raise RuntimeError(f"❌ Failed to load classifier model: {e}")
+    raise RuntimeError(f" Failed to load classifier model: {e}")
 
 # =========================
 # MODEL INPUT CONFIG
@@ -29,7 +29,7 @@ INPUT_SHAPE = classifier_model.input_shape  # (None, 128, 128, 3)
 TARGET_SIZE = INPUT_SHAPE[1:3]
 GRAYSCALE = INPUT_SHAPE[-1] == 1
 
-print(f"📌 Model expects: {TARGET_SIZE}, {'Grayscale' if GRAYSCALE else 'RGB'}")
+print(f" Model expects: {TARGET_SIZE}, {'Grayscale' if GRAYSCALE else 'RGB'}")
 
 # =========================
 # PREPROCESS FUNCTION

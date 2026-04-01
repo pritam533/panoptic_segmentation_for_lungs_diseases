@@ -7,8 +7,8 @@ from utils.segmentation import segment_image
 from utils.classification import classify_disease
 from utils.report_generator import generate_report
 
-unet_model = load_model("app\model\unet_model.h5")
-classifier_model = load_model("app\model\classifier_model.h5")
+unet_model = load_model("app/model/unet_model.h5")
+classifier_model = load_model("app/model/classifier_model.h5")
 # Ensure directories exist
 os.makedirs('app/static/uploaded_images', exist_ok=True)
 os.makedirs('app/static/output_images', exist_ok=True)
