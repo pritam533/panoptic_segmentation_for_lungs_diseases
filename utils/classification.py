@@ -6,7 +6,7 @@
 # # =========================
 # # PATHS
 # # =========================
-# BASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'classifier_compatible.h5')
+# BASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'unet_saved_model')
 
 # # MODEL_PATH = os.path.join(BASE_PATH, 'classifier_model.keras')
 # # LABELS_PATH = os.path.join(BASE_PATH, 'labels.npy')
@@ -95,7 +95,7 @@ from tensorflow.keras.models import load_model
 # =========================
 # LOAD MODEL
 # =========================
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'classifier_compatible.h5')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'classifier_saved_model')
 
 try:
     classifier_model = load_model(MODEL_PATH, compile=False)
