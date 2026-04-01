@@ -89,8 +89,22 @@ from utils.report_generator import generate_report
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-unet_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "unet_compatible.h5"), compile=False)
-classifier_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "classifier_compatible.h5"), compile=False)
+# unet_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "unet_compatible.h5"), compile=False)
+# classifier_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "classifier_compatible.h5"), compile=False)
+
+# unet_model = load_model("app/model/unet_compatible.h5", compile=False)
+try:
+    unet_model = load_model("app/model/unet_compatible.h5", compile=False)
+    print(" Segmentation model loaded")
+except Exception as e:
+    print(" Segmentation model error:", str(e))
+# classifier_model = load_model("app/model/classifier_compatible.h5", compile=False)
+try:
+    classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+    print("✅ Classification model loaded")
+except Exception as e:
+    print("❌ Classification model error:", str(e))
+
 
 os.makedirs('app/static/uploaded_images', exist_ok=True)
 os.makedirs('app/static/output_images', exist_ok=True)
