@@ -23,26 +23,46 @@
 # print("✅ Fixed model saved")
 
 
+# from tensorflow.keras.models import load_model
+
+# # ==============================
+# # 🔹 Convert U-Net (Segmentation)
+# # ==============================
+# print("Loading UNet model...")
+# unet_model = load_model("app/model/unet_fixed.h5", compile=False)
+
+# print("Saving compatible UNet model...")
+# unet_model.save("app/model/unet_compatible.h5", save_format="h5")
+
+
+# # ==============================
+# # 🔹 Convert Classifier Model
+# # ==============================
+# print("Loading Classifier model...")
+# classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+
+# print("Saving compatible Classifier model...")
+# classifier_model.save("app/model/classifier_compatible.h5", save_format="h5")
+
+
+# print("✅ Conversion completed successfully!")
+
+
 from tensorflow.keras.models import load_model
 
-# ==============================
-# 🔹 Convert U-Net (Segmentation)
-# ==============================
-print("Loading UNet model...")
-unet_model = load_model("app/model/unet_fixed.h5", compile=False)
-
-print("Saving compatible UNet model...")
-unet_model.save("app/model/unet_compatible.h5", save_format="h5")
-
-
-# ==============================
-# 🔹 Convert Classifier Model
-# ==============================
-print("Loading Classifier model...")
-classifier_model = load_model("app/model/classifier_model.h5", compile=False)
-
-print("Saving compatible Classifier model...")
-classifier_model.save("app/model/classifier_compatible.h5", save_format="h5")
+# ✅ Convert Segmentation Model
+try:
+    unet_model = load_model("app/model/unet_model.h5", compile=False)
+    unet_model.export("app/model/unet_saved_model")   # 🔥 CHANGE HERE
+    print("✅ Segmentation model converted")
+except Exception as e:
+    print("❌ Segmentation model error:", e)
 
 
-print("✅ Conversion completed successfully!")
+# ✅ Convert Classification Model
+try:
+    classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+    classifier_model.export("app/model/classifier_saved_model")   # 🔥 CHANGE HERE
+    print("✅ Classification model converted")
+except Exception as e:
+    print("❌ Classification model error:", e)

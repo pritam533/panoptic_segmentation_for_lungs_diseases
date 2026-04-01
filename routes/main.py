@@ -1,3 +1,100 @@
+import os
+from flask import Blueprint, request, jsonify, render_template
+from tensorflow.keras.models import load_model
+import cv2
+
+from utils.segmentation import segment_image
+from utils.classification import classify_disease
+from utils.report_generator import generate_report
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+#  Correct SavedModel paths (VERY IMPORTANT)
+UNET_PATH = os.path.join(BASE_DIR, "..", "app", "model", "unet_saved_model")
+CLASSIFIER_PATH = os.path.join(BASE_DIR, "..", "app", "model", "classifier_saved_model")
+
+# Load Segmentation Model
+try:
+    unet_model = load_model(UNET_PATH)
+    print("Segmentation model loaded successfully")
+except Exception as e:
+    print(" Segmentation model error:", str(e))
+
+#  Load Classification Model
+try:
+    classifier_model = load_model(CLASSIFIER_PATH)
+    print(" Classification model loaded successfully")
+except Exception as e:
+    print(" Classification model error:", str(e))
+
+
+# Ensure directories exist
+os.makedirs('app/static/uploaded_images', exist_ok=True)
+os.makedirs('app/static/output_images', exist_ok=True)
+
+main = Blueprint('main', __name__)
+
+@main.route("/")
+def home():
+    return "Lung Detection API Running "
+
+
+@main.route('/analyze', methods=['POST'])
+def analyze():
+    try:
+        file = request.files['xray']
+        name = request.form['name']
+        age = float(request.form['age'])
+        gender = request.form['gender']
+
+        upload_dir = 'app/static/uploaded_images'
+        output_dir = 'app/static/output_images'
+
+        xray_path = os.path.join(upload_dir, file.filename)
+        mask_path = os.path.join(output_dir, f'mask_{file.filename}')
+        report_path = os.path.join(output_dir, f'report_{os.path.splitext(file.filename)[0]}.pdf')
+
+        file.save(xray_path)
+
+        #  Pass model explicitly
+        mask = segment_image(xray_path, unet_model)
+        cv2.imwrite(mask_path, mask)
+
+        disease, confidence, severity = classify_disease(xray_path, classifier_model)
+
+        generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
+
+        if severity.lower() == "low":
+            comment = "Mild condition detected. No immediate risk, but monitoring is advised."
+        elif severity.lower() == "medium":
+            comment = "Moderate infection detected. Please consult a doctor."
+        else:
+            comment = "Severe condition detected. Immediate medical attention required."
+
+        return jsonify({
+            "success": True,
+            "disease": disease,
+            "severity": severity,
+            "confidence": f"{confidence:.2f}",
+            "comment": comment,
+            "segmented_image": f"mask_{file.filename}",
+            "pdf_report": f"report_{os.path.splitext(file.filename)[0]}.pdf"
+        })
+
+    except Exception as e:
+        print(" ERROR in /analyze:", str(e))  #  DEBUG LINE
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+
+
+
+
+
+
 # from flask import Blueprint, request, jsonify, render_template
 # import sys
 # import os
@@ -78,89 +175,89 @@
 
 
 
-import os
-from flask import Blueprint, request, jsonify, render_template
-from tensorflow.keras.models import load_model
-import cv2
+# import os
+# from flask import Blueprint, request, jsonify, render_template
+# from tensorflow.keras.models import load_model
+# import cv2
 
-from utils.segmentation import segment_image
-from utils.classification import classify_disease
-from utils.report_generator import generate_report
+# from utils.segmentation import segment_image
+# from utils.classification import classify_disease
+# from utils.report_generator import generate_report
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# unet_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "unet_compatible.h5"), compile=False)
-# classifier_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "classifier_compatible.h5"), compile=False)
+# # unet_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "unet_compatible.h5"), compile=False)
+# # classifier_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "classifier_compatible.h5"), compile=False)
 
-# unet_model = load_model("app/model/unet_compatible.h5", compile=False)
-try:
-    unet_model = load_model("app/model/unet_compatible.h5", compile=False)
-    print(" Segmentation model loaded")
-except Exception as e:
-    print(" Segmentation model error:", str(e))
-# classifier_model = load_model("app/model/classifier_compatible.h5", compile=False)
-try:
-    classifier_model = load_model("app/model/classifier_model.h5", compile=False)
-    print("✅ Classification model loaded")
-except Exception as e:
-    print("❌ Classification model error:", str(e))
+# # unet_model = load_model("app/model/unet_compatible.h5", compile=False)
+# try:
+#     unet_model = load_model("app/model/unet_compatible.h5", compile=False)
+#     print(" Segmentation model loaded")
+# except Exception as e:
+#     print(" Segmentation model error:", str(e))
+# # classifier_model = load_model("app/model/classifier_compatible.h5", compile=False)
+# try:
+#     classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+#     print("✅ Classification model loaded")
+# except Exception as e:
+#     print("❌ Classification model error:", str(e))
 
 
-os.makedirs('app/static/uploaded_images', exist_ok=True)
-os.makedirs('app/static/output_images', exist_ok=True)
+# os.makedirs('app/static/uploaded_images', exist_ok=True)
+# os.makedirs('app/static/output_images', exist_ok=True)
 
-main = Blueprint('main', __name__)
+# main = Blueprint('main', __name__)
 
-# @main.route("/")
-# def home():
-#     return "Lung Detection API Running"
+# # @main.route("/")
+# # def home():
+# #     return "Lung Detection API Running"
 
-@main.route('/analyze', methods=['POST'])
-def analyze():
-    try:
-        file = request.files['xray']
-        name = request.form['name']
-        age = float(request.form['age'])
-        gender = request.form['gender']
+# @main.route('/analyze', methods=['POST'])
+# def analyze():
+#     try:
+#         file = request.files['xray']
+#         name = request.form['name']
+#         age = float(request.form['age'])
+#         gender = request.form['gender']
 
-        upload_dir = 'app/static/uploaded_images'
-        output_dir = 'app/static/output_images'
+#         upload_dir = 'app/static/uploaded_images'
+#         output_dir = 'app/static/output_images'
 
-        xray_path = os.path.join(upload_dir, file.filename)
-        mask_path = os.path.join(output_dir, f'mask_{file.filename}')
-        report_path = os.path.join(output_dir, f'report_{os.path.splitext(file.filename)[0]}.pdf')
+#         xray_path = os.path.join(upload_dir, file.filename)
+#         mask_path = os.path.join(output_dir, f'mask_{file.filename}')
+#         report_path = os.path.join(output_dir, f'report_{os.path.splitext(file.filename)[0]}.pdf')
 
-        file.save(xray_path)
+#         file.save(xray_path)
 
-        mask = segment_image(xray_path, unet_model)
-        cv2.imwrite(mask_path, mask)
+#         mask = segment_image(xray_path, unet_model)
+#         cv2.imwrite(mask_path, mask)
 
-        disease, confidence, severity = classify_disease(xray_path, classifier_model)
+#         disease, confidence, severity = classify_disease(xray_path, classifier_model)
 
-        generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
+#         generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
 
-        if severity.lower() == "low":
-            comment = "Mild condition detected. No immediate risk, but monitoring is advised."
-        elif severity.lower() == "medium":
-            comment = "Moderate infection detected. Please consult a doctor."
-        else:
-            comment = "Severe condition detected. Immediate medical attention required."
+#         if severity.lower() == "low":
+#             comment = "Mild condition detected. No immediate risk, but monitoring is advised."
+#         elif severity.lower() == "medium":
+#             comment = "Moderate infection detected. Please consult a doctor."
+#         else:
+#             comment = "Severe condition detected. Immediate medical attention required."
 
-        return jsonify({
-            "success": True,
-            "disease": disease,
-            "severity": severity,
-            "confidence": f"{confidence:.2f}",
-            "comment": comment,
-            "segmented_image": f"mask_{file.filename}",
-            "pdf_report": f"report_{os.path.splitext(file.filename)[0]}.pdf"
-        })
+#         return jsonify({
+#             "success": True,
+#             "disease": disease,
+#             "severity": severity,
+#             "confidence": f"{confidence:.2f}",
+#             "comment": comment,
+#             "segmented_image": f"mask_{file.filename}",
+#             "pdf_report": f"report_{os.path.splitext(file.filename)[0]}.pdf"
+#         })
 
-    except Exception as e:
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 500
+#     except Exception as e:
+#         return jsonify({
+#             "success": False,
+#             "error": str(e)
+#         }), 500
 
 
 
