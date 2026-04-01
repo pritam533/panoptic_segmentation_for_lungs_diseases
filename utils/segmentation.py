@@ -15,7 +15,7 @@ import os
 from tensorflow.keras.models import load_model
 import os
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'unet_model.h5')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'unet_fixed.h5')
 
 try:
     unet_model = load_model(MODEL_PATH, compile=False)
