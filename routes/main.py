@@ -89,17 +89,17 @@ from utils.report_generator import generate_report
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-unet_model = load_model(os.path.join(BASE_DIR, "..", "model", "unet_fixed.h5"), compile=False)
-classifier_model = load_model(os.path.join(BASE_DIR, "..", "model", "classifier_model.h5"), compile=False)
+unet_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "unet_compatible.h5"), compile=False)
+classifier_model = load_model(os.path.join(BASE_DIR, "..", "app", "model", "classifier_compatible.h5"), compile=False)
 
 os.makedirs('app/static/uploaded_images', exist_ok=True)
 os.makedirs('app/static/output_images', exist_ok=True)
 
 main = Blueprint('main', __name__)
 
-@main.route("/")
-def home():
-    return "Lung Detection API Running"
+# @main.route("/")
+# def home():
+#     return "Lung Detection API Running"
 
 @main.route('/analyze', methods=['POST'])
 def analyze():
