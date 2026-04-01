@@ -6,10 +6,10 @@ from tensorflow.keras.models import load_model
 # =========================
 # PATHS
 # =========================
-BASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model')
+BASE_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'classifier_model.h5')
 
-MODEL_PATH = os.path.join(BASE_PATH, 'classifier_model.keras')
-LABELS_PATH = os.path.join(BASE_PATH, 'labels.npy')
+# MODEL_PATH = os.path.join(BASE_PATH, 'classifier_model.keras')
+# LABELS_PATH = os.path.join(BASE_PATH, 'labels.npy')
 
 # =========================
 # LOAD MODEL + LABELS
