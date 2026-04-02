@@ -94,7 +94,7 @@ from tensorflow.keras.models import load_model
 # =========================
 # LOAD MODEL
 # =========================
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'classifier_saved_model')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'app', 'model', 'classifier_model.keras')
 
 try:
     classifier_model = load_model(MODEL_PATH, compile=False)
@@ -110,7 +110,6 @@ labels = ['COVID', 'Normal', 'Lung_Opacity', 'Viral Pneumonia']
 # =========================
 # MODEL INPUT CONFIG (FIXED)
 # =========================
-# ❌ Removed classifier_model.input_shape
 # ✅ Set manually (same as training)
 TARGET_SIZE = (128, 128)
 GRAYSCALE = False  # change to True if your model was trained on grayscale
@@ -149,8 +148,9 @@ def classify_disease(image_path):
 
         # ❌ OLD: classifier_model.predict()
         # ✅ NEW: direct call (works for SavedModel)
-        preds = classifier_model(input_img, training=False).numpy()
-
+        # preds = classifier_model(input_img, training=False).numpy()
+        preds = classifier_model.predict(input_img)
+        
         predicted_idx = int(np.argmax(preds))
         confidence = float(np.max(preds))
 
