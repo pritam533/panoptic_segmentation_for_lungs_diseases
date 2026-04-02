@@ -1,5 +1,5 @@
-tensorflow==2.15.0
-keras==2.15.0
+tensorflow==2.13.0
+keras==2.13.1
 h5py==3.8.0
 numpy==1.23.5
 opencv-python-headless==4.8.1.78
