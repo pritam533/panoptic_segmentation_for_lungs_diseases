@@ -41,10 +41,9 @@ os.makedirs('app/static/output_images', exist_ok=True)
 
 main = Blueprint('main', __name__)
 
-@main.route("/")
-def home():
-    return "Lung Detection API Running "
-
+@main.route('/')
+def index():
+    return render_template('index.html')
 
 @main.route('/analyze', methods=['POST'])
 def analyze():
