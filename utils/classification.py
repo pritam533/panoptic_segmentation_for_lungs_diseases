@@ -86,7 +86,6 @@
 #         raise ValueError(f"Classification failed: {str(e)}")
 
 
-
 import cv2
 import numpy as np
 import os
@@ -109,12 +108,12 @@ except Exception as e:
 labels = ['COVID', 'Normal', 'Lung_Opacity', 'Viral Pneumonia']
 
 # =========================
-# MODEL INPUT CONFIG
+# MODEL INPUT CONFIG (FIXED)
 # =========================
-INPUT_SHAPE = classifier_model.input_shape  # (None, 128, 128, 3)
-
-TARGET_SIZE = INPUT_SHAPE[1:3]
-GRAYSCALE = INPUT_SHAPE[-1] == 1
+# ❌ Removed classifier_model.input_shape
+# ✅ Set manually (same as training)
+TARGET_SIZE = (128, 128)
+GRAYSCALE = False  # change to True if your model was trained on grayscale
 
 print(f"📌 Model expects: {TARGET_SIZE}, {'Grayscale' if GRAYSCALE else 'RGB'}")
 
@@ -148,7 +147,9 @@ def classify_disease(image_path):
     try:
         input_img = preprocess_image(image_path)
 
-        preds = classifier_model.predict(input_img)
+        # ❌ OLD: classifier_model.predict()
+        # ✅ NEW: direct call (works for SavedModel)
+        preds = classifier_model(input_img, training=False).numpy()
 
         predicted_idx = int(np.argmax(preds))
         confidence = float(np.max(preds))
