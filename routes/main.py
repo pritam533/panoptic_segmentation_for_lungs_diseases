@@ -74,21 +74,14 @@ def index():
 # -------------------------------
 @main.route('/analyze', methods=['POST'])
 def analyze():
+    global unet_model, classifier_model
+
     try:
-        # ✅ LOAD MODELS FIRST
-        load_models()
-
-        print("DEBUG MODELS:", unet_model, classifier_model)
-
+        # 🔥 Ensure models loaded
         if unet_model is None or classifier_model is None:
-            return jsonify({
-                "success": False,
-                "error": "Models not loaded"
-            }), 500
+            print("⚠️ Models not loaded, loading now...")
+            load_models()
 
-        # -----------------------
-        # INPUT DATA
-        # -----------------------
         file = request.files['xray']
         name = request.form['name']
         age = float(request.form['age'])
@@ -97,33 +90,101 @@ def analyze():
         upload_dir = 'app/static/uploaded_images'
         output_dir = 'app/static/output_images'
 
+        os.makedirs(upload_dir, exist_ok=True)
+        os.makedirs(output_dir, exist_ok=True)
+
         xray_path = os.path.join(upload_dir, file.filename)
         mask_path = os.path.join(output_dir, f'mask_{file.filename}')
-        report_path = os.path.join(
-            output_dir,
-            f'report_{os.path.splitext(file.filename)[0]}.pdf'
-        )
+        report_path = os.path.join(output_dir, f'report_{os.path.splitext(file.filename)[0]}.pdf')
 
         file.save(xray_path)
 
-        # -----------------------
-        # SEGMENTATION
-        # -----------------------
-        print("🧠 Running segmentation...")
+        print("📸 Image saved")
+
+        # 🔥 STEP 1: Segmentation
         mask = segment_image(xray_path, unet_model)
         cv2.imwrite(mask_path, mask)
 
-        # -----------------------
-        # CLASSIFICATION
-        # -----------------------
-        print("🧠 Running classification...")
+        print("🧠 Segmentation done")
+
+        # 🔥 STEP 2: Classification
         disease, confidence, severity = classify_disease(xray_path, classifier_model)
 
-        # -----------------------
-        # REPORT GENERATION
-        # -----------------------
-        print("📄 Generating report...")
+        print("🧠 Classification done")
+
+        # 🔥 STEP 3: Report
         generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
+
+        print("📄 Report generated")
+
+    #     return jsonify({
+    #         "success": True,
+    #         "disease": disease,
+    #         "severity": severity,
+    #         "confidence": f"{confidence:.2f}",
+    #         "segmented_image": f"mask_{file.filename}",
+    #         "pdf_report": f"report_{os.path.splitext(file.filename)[0]}.pdf"
+    #     })
+
+    # except Exception as e:
+    #     print("❌ ERROR:", str(e))
+    #     return jsonify({
+    #         "success": False,
+    #         "error": str(e)
+    #     }), 500
+----------------------------------
+# @main.route('/analyze', methods=['POST'])
+# def analyze():
+#     try:
+#         # ✅ LOAD MODELS FIRST
+#         load_models()
+
+#         print("DEBUG MODELS:", unet_model, classifier_model)
+
+#         if unet_model is None or classifier_model is None:
+#             return jsonify({
+#                 "success": False,
+#                 "error": "Models not loaded"
+#             }), 500
+
+#         # -----------------------
+#         # INPUT DATA
+#         # -----------------------
+#         file = request.files['xray']
+#         name = request.form['name']
+#         age = float(request.form['age'])
+#         gender = request.form['gender']
+
+#         upload_dir = 'app/static/uploaded_images'
+#         output_dir = 'app/static/output_images'
+
+#         xray_path = os.path.join(upload_dir, file.filename)
+#         mask_path = os.path.join(output_dir, f'mask_{file.filename}')
+#         report_path = os.path.join(
+#             output_dir,
+#             f'report_{os.path.splitext(file.filename)[0]}.pdf'
+#         )
+
+#         file.save(xray_path)
+
+#         # -----------------------
+#         # SEGMENTATION
+#         # -----------------------
+#         print("🧠 Running segmentation...")
+#         mask = segment_image(xray_path, unet_model)
+#         cv2.imwrite(mask_path, mask)
+
+#         # -----------------------
+#         # CLASSIFICATION
+#         # -----------------------
+#         print("🧠 Running classification...")
+#         disease, confidence, severity = classify_disease(xray_path, classifier_model)
+
+#         # -----------------------
+#         # REPORT GENERATION
+#         # -----------------------
+#         print("📄 Generating report...")
+#         generate_report(name, age, gender, xray_path, mask_path, disease, severity, report_path)
 
         # -----------------------
         # COMMENTS
