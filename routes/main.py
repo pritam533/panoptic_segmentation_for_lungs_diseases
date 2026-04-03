@@ -1,28 +1,33 @@
 import os
 from flask import Blueprint, request, jsonify, render_template
 import cv2
+from flask import Flask
+from routes.main import main
 
+app = Flask(__name__, template_folder='templates')
+
+app.register_blueprint(main)
 from utils.segmentation import segment_image
 from utils.classification import classify_disease
 from utils.report_generator import generate_report
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
-# ✅ Lazy loading variables
+
+#  Lazy loading variables
 unet_model = None
 classifier_model = None
 
-# ✅ Load models only when needed
+#  Load models only when needed
 def load_models():
     global unet_model, classifier_model
     
     if unet_model is None:
         from tensorflow.keras.models import load_model
         
-        print("🔄 Loading models...")
+        print(" Loading models...")
         unet_model = load_model("app/model/unet_model.h5", compile=False)
         classifier_model = load_model("app/model/classifier_model.h5", compile=False)
-        print("✅ Models loaded successfully")
+        print(" Models loaded successfully")
 
 # Ensure directories exist
 os.makedirs('app/static/uploaded_images', exist_ok=True)
@@ -32,7 +37,7 @@ main = Blueprint('main', __name__)
 
 # @main.route('/')
 # def index():
-#     return "API is running 🚀"
+#     return "API is running "
 
 
 
