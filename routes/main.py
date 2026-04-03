@@ -110,30 +110,36 @@ from utils.report_generator import generate_report
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
-# ✅ Global models
+#  Global models
 unet_model = None
 classifier_model = None
 
-# ✅ Load models safely
+#  Load models safely
 def load_models():
     global unet_model, classifier_model
     
     if unet_model is None:
         from tensorflow.keras.models import load_model
         
-        print("🔄 Loading models...")
+        print(" Loading models...")
 
         try:
             unet_model = load_model("app/model/unet_model.h5", compile=False)
-            print("✅ UNet loaded")
-        except Exception as e:
-            print("❌ UNet load error:", e)
+            print(" UNet loaded")
+            unet_model = load_model("app/model/unet_model.h5", compile=False)
+           classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+           print(" Models loaded")
 
-        try:
-            classifier_model = load_model("app/model/classifier_model.h5", compile=False)
-            print("✅ Classifier loaded")
-        except Exception as e:
-            print("❌ Classifier load error:", e)
+# ✅ LOAD ON STARTUP (IMPORTANT)
+load_models()
+        # except Exception as e:
+        #     print("❌ UNet load error:", e)
+
+        # try:
+        #     classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+        #     print("✅ Classifier loaded")
+        # except Exception as e:
+        #     print("❌ Classifier load error:", e)
 
 
 # Ensure directories exist
