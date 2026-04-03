@@ -132,7 +132,7 @@ def analyze():
     #         "success": False,
     #         "error": str(e)
     #     }), 500
-----------------------------------
+# ----------------------------------
 # @main.route('/analyze', methods=['POST'])
 # def analyze():
 #     try:
