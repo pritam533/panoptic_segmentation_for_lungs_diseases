@@ -2,7 +2,6 @@ import os
 from flask import Blueprint, request, jsonify, render_template
 import cv2
 from flask import Flask
-from routes.main import main
 
 app = Flask(__name__, template_folder='templates')
 
