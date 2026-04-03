@@ -1,15 +1,29 @@
 from flask import Flask
-# from routes.main import main
-import os
-app = Flask(__name__, 
-            static_folder='app/static',  
-            template_folder='frontend')
+from routes.main import main
 
+app = Flask(__name__, template_folder='templates')
 
+# ✅ Register here (correct place)
 app.register_blueprint(main)
+
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))  # 🔥 IMPORTANT
-    app.run(host="0.0.0.0", port=port)
+    app.run()
+
+
+
+
+# from flask import Flask
+# # from routes.main import main
+# import os
+# app = Flask(__name__, 
+#             static_folder='app/static',  
+#             template_folder='frontend')
+
+
+# app.register_blueprint(main)
+# if __name__ == "__main__":
+#     port = int(os.environ.get("PORT", 10000))  # 🔥 IMPORTANT
+#     app.run(host="0.0.0.0", port=port)
 
 # if __name__ == "__main__":
 #     port = int(os.environ.get("PORT", 10000))
