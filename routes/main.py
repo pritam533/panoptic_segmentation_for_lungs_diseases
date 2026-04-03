@@ -103,7 +103,7 @@
 import os
 from flask import Blueprint, request, jsonify, render_template
 import cv2
-
+import time
 from utils.segmentation import segment_image
 from utils.classification import classify_disease
 from utils.report_generator import generate_report
@@ -156,10 +156,19 @@ def index():
 
 @main.route('/analyze', methods=['POST'])
 def analyze():
+
+
+    start = time.time()
+
+    print("🧠 Running segmentation...")
+    mask = segment_image(xray_path, unet_model)
+
+    print("⏱ Segmentation time:", time.time() - start)
     try:
         # ✅ VERY IMPORTANT: LOAD MODELS HERE
         load_models()
 
+         
         if unet_model is None or classifier_model is None:
             return jsonify({
                 "success": False,
