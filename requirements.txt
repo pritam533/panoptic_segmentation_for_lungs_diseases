@@ -1,4 +1,3 @@
-fpdf
 Flask==2.3.2
 Flask-Cors==3.0.10
 gunicorn==21.2.0
@@ -9,3 +8,4 @@ numpy>=1.23.5
 h5py==3.9.0
 opencv-python
 Pillow
+fpdf
