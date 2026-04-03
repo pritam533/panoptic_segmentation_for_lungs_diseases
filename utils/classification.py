@@ -31,10 +31,10 @@ def preprocess_image(image_path):
 
         if img is None:
             raise ValueError("Invalid image file")
-
+     
         img = cv2.resize(img, TARGET_SIZE)
         img = img.astype(np.float32) / 255.0
-
+        img = cv2.resize(img, (128, 128))
         if GRAYSCALE:
             img = np.expand_dims(img, axis=-1)
 
