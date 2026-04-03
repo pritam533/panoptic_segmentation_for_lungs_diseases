@@ -1,16 +1,28 @@
+# from flask import Flask
+# from routes.main import main
+
+# app = Flask(__name__, template_folder='templates')
+
+# # ✅ Register here (correct place)
+# app.register_blueprint(main)
+
+# if __name__ == "__main__":
+#     app.run()
+
+
 from flask import Flask
 from routes.main import main
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(
+    __name__,
+    template_folder="app/templates",   # ✅ FIX
+    static_folder="app/static"         # ✅ FIX
+)
 
-# ✅ Register here (correct place)
 app.register_blueprint(main)
 
 if __name__ == "__main__":
     app.run()
-
-
-
 
 # from flask import Flask
 # # from routes.main import main
