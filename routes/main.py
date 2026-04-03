@@ -1,38 +1,38 @@
-import os
-from flask import Blueprint, request, jsonify, render_template
-import cv2
-from flask import Flask
+# import os
+# from flask import Blueprint, request, jsonify, render_template
+# import cv2
+# from flask import Flask
 
-app = Flask(__name__, template_folder='templates')
+# app = Flask(__name__, template_folder='templates')
 
-app.register_blueprint(main)
-from utils.segmentation import segment_image
-from utils.classification import classify_disease
-from utils.report_generator import generate_report
+# app.register_blueprint(main)
+# from utils.segmentation import segment_image
+# from utils.classification import classify_disease
+# from utils.report_generator import generate_report
 
 
 
-#  Lazy loading variables
-unet_model = None
-classifier_model = None
+# #  Lazy loading variables
+# unet_model = None
+# classifier_model = None
 
-#  Load models only when needed
-def load_models():
-    global unet_model, classifier_model
+# #  Load models only when needed
+# def load_models():
+#     global unet_model, classifier_model
     
-    if unet_model is None:
-        from tensorflow.keras.models import load_model
+#     if unet_model is None:
+#         from tensorflow.keras.models import load_model
         
-        print(" Loading models...")
-        unet_model = load_model("app/model/unet_model.h5", compile=False)
-        classifier_model = load_model("app/model/classifier_model.h5", compile=False)
-        print(" Models loaded successfully")
+#         print(" Loading models...")
+#         unet_model = load_model("app/model/unet_model.h5", compile=False)
+#         classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+#         print(" Models loaded successfully")
 
-# Ensure directories exist
-os.makedirs('app/static/uploaded_images', exist_ok=True)
-os.makedirs('app/static/output_images', exist_ok=True)
+# # Ensure directories exist
+# os.makedirs('app/static/uploaded_images', exist_ok=True)
+# os.makedirs('app/static/output_images', exist_ok=True)
 
-main = Blueprint('main', __name__)
+# main = Blueprint('main', __name__)
 
 # @main.route('/')
 # def index():
@@ -85,10 +85,40 @@ main = Blueprint('main', __name__)
 # os.makedirs('app/static/output_images', exist_ok=True)
 
 # main = Blueprint('main', __name__)
+import os
+from flask import Blueprint, request, jsonify, render_template
+import cv2
+
+from utils.segmentation import segment_image
+from utils.classification import classify_disease
+from utils.report_generator import generate_report
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
+unet_model = None
+classifier_model = None
+
+def load_models():
+    global unet_model, classifier_model
+    if unet_model is None:
+        from tensorflow.keras.models import load_model
+        print("🔄 Loading models...")
+        unet_model = load_model("app/model/unet_model.h5", compile=False)
+        classifier_model = load_model("app/model/classifier_model.h5", compile=False)
+        print("✅ Models loaded")
+
+os.makedirs('app/static/uploaded_images', exist_ok=True)
+os.makedirs('app/static/output_images', exist_ok=True)
+
+# ✅ Blueprint only here
+main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
     return render_template('index.html')
+# @main.route('/')
+# def index():
+#     return render_template('index.html')
 
 @main.route('/analyze', methods=['POST'])
 def analyze():
