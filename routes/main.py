@@ -6,15 +6,16 @@ import cv2
 from utils.segmentation import segment_image
 from utils.classification import classify_disease
 from utils.report_generator import generate_report
-
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # Suppress TensorFlow warnings
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 #  Correct SavedModel paths (VERY IMPORTANT)
 
 from tensorflow.keras.models import load_model
 
-unet_model = load_model("app/model/unet_model.keras", compile=False)
-classifier_model = load_model("app/model/classifier_model.keras", compile=False)
+unet_model = load_model("app/model/unet_model.h5", compile=False)
+classifier_model = load_model("app/model/classifier_model.h5", compile=False)
 
 print(" Models loaded successfully")
 # UNET_PATH = os.path.join(BASE_DIR, "..", "app", "model", "unet_saved_model")

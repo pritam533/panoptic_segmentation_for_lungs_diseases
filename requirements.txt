@@ -1,8 +1,24 @@
+<<<<<<< HEAD
 fpdf
+=======
+# tensorflow==2.13.0
+# keras==2.13.1
+# h5py==3.8.0
+# numpy==1.23.5
+# opencv-python-headless==4.8.1.78
+# gunicorn==21.2.0
+# Flask==2.3.2
+# pillow
+
+
+Flask==2.3.2
+Flask-Cors==3.0.10
+gunicorn==21.2.0
+
+>>>>>>> b231f2d4 (Fixed deployment: converted model to h5 and updated requirements)
 tensorflow==2.13.0
 keras==2.13.1
-h5py==3.8.0
-numpy==1.23.5
-opencv-python-headless==4.8.1.78
-gunicorn==21.2.0
-Flask==2.3.2
+numpy>=1.23.5
+h5py==3.9.0
+opencv-python
+Pillow
